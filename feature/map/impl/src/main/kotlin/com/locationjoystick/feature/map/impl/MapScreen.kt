@@ -58,6 +58,7 @@ import com.locationjoystick.core.map.maplibre.addLocationLayers
 import com.locationjoystick.core.map.maplibre.applyZoomBounds
 import com.locationjoystick.core.map.maplibre.followOrSnapTo
 import com.locationjoystick.core.map.maplibre.rememberMapView
+import com.locationjoystick.core.map.projection.Gcj02
 import com.locationjoystick.core.map.projection.projection
 import com.locationjoystick.core.map.ui.MapAttribution
 import com.locationjoystick.core.model.LatLng
@@ -202,11 +203,39 @@ internal fun MapScreen(
 
     // Base-map provider + the WGS-84 <-> map-datum projection that goes with it. Everything drawn
     // on or read back from the MapLibre map passes through `proj`; the app's own state stays WGS-84.
-    val tileSource = uiState.mapTileSource
+    //
+    // ESRI is the global default, but in mainland China its detailed tile cache stops around z13
+    // and returns a "Map data not yet available" placeholder at higher zooms. AMap provides the
+    // detailed mainland-China coverage but is not useful outside China. Treat ESRI/AMAP as an
+    // automatic regional pair selected from the current camera center. OSM remains a manual source.
+    fun regionalTileSource(position: LatLng): MapTileSource =
+        if (Gcj02.isOutsideChina(position.latitude, position.longitude)) {
+            MapTileSource.ESRI
+        } else {
+            MapTileSource.AMAP
+        }
+
+    val configuredTileSource = uiState.mapTileSource
+    val automaticRegionalSource =
+        remember {
+            mutableStateOf(
+                when (configuredTileSource) {
+                    MapTileSource.ESRI, MapTileSource.AMAP ->
+                        regionalTileSource(initialPosition ?: configuredTileSource.defaultCenter)
+                    else -> configuredTileSource
+                },
+            )
+        }
+    val tileSource =
+        when (configuredTileSource) {
+            MapTileSource.ESRI, MapTileSource.AMAP -> automaticRegionalSource.value
+            else -> configuredTileSource
+        }
     val proj = tileSource.projection
     val appliedTileSource = remember { mutableStateOf<MapTileSource?>(null) }
-    // Map callbacks outlive recomposition; read the latest source instead of a first-composition capture.
+    // Map callbacks outlive recomposition; read the latest sources instead of first-composition captures.
     val currentTileSource by rememberUpdatedState(tileSource)
+    val currentConfiguredTileSource by rememberUpdatedState(configuredTileSource)
 
     fun LatLng.toMapLatLng(): MapLatLng = proj.toMap(this).let { MapLatLng(it.latitude, it.longitude) }
 
@@ -355,6 +384,26 @@ internal fun MapScreen(
                                 if (reason == MapLibreMap.OnCameraMoveStartedListener.REASON_API_GESTURE) {
                                     isFollowingCamera.value = false
                                     onAction(MapAction.UserStartedPanning)
+                                }
+                            }
+
+                            map.addOnCameraIdleListener {
+                                if (
+                                    currentConfiguredTileSource != MapTileSource.ESRI &&
+                                    currentConfiguredTileSource != MapTileSource.AMAP
+                                ) {
+                                    return@addOnCameraIdleListener
+                                }
+
+                                val currentSource = currentTileSource
+                                val target = map.cameraPosition.target ?: return@addOnCameraIdleListener
+                                val centerWgs =
+                                    currentSource.projection.fromMap(
+                                        LatLng(target.latitude, target.longitude),
+                                    )
+                                val desired = regionalTileSource(centerWgs)
+                                if (desired != automaticRegionalSource.value) {
+                                    automaticRegionalSource.value = desired
                                 }
                             }
                         }

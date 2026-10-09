@@ -10,7 +10,7 @@ Current fork policy:
 - Automatic upstream release checks are disabled.
 - Automatic hot-location and hot-route refreshes on application launch are disabled.
 - Network access initiated by explicit user actions, such as map tiles, geocoding, route planning, group sync, or opening changelog content, is unchanged.
-- Map compatibility: Esri World Street Map is the fork default global tile source because it was reachable on the target NJU-WLAN for both Paris and Nanjing; AMap remains available for mainland-China GCJ-02 mapping, and legacy OSM defaults migrate once to Esri.
+- Map compatibility: Esri World Street Map is the global provider and AMap is the mainland-China provider. The map automatically switches between the two from the current camera center; legacy OSM defaults still migrate once to Esri. Redmi/NJU-WLAN testing showed Esri returns a fixed `Map data not yet available` tile in Nanjing from z14 upward, while AMap remains detailed there.
 - Geocoding prefers Photon and falls back to Nominatim because Redmi/NJU-WLAN testing showed Photon reachable while Nominatim timed out.
 - No ads, account requirement, subscription, or paid unlock has been added.
 

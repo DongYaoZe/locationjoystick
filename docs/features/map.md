@@ -27,8 +27,8 @@ point.
 | Source | Tiles | Datum | Zoom | Default center | Notes |
 |---|---|---|---|---|---|
 | `OSM` | `tile.openstreetmap.org` | WGS-84 | 0–19 | Paris | Upstream source; unreachable on the target NJU-WLAN during Redmi testing. |
-| `ESRI` (default) | `server.arcgisonline.com/.../World_Street_Map/.../tile/{z}/{y}/{x}` | WGS-84 | 0–19 | Paris | Global fallback/default; Redmi tests returned tiles for both Paris and Nanjing. |
-| `AMAP` | `webrd0{1-4}.is.autonavi.com` (style 8, zh labels) | GCJ-02 | 3–18 | Beijing | Community raster endpoint, no API key. Fast from mainland China where OSM tiles are throttled. Coverage is mainland China only. |
+| `ESRI` (global/default setting) | `server.arcgisonline.com/.../World_Street_Map/.../tile/{z}/{y}/{x}` | WGS-84 | 0–19 | Paris | Global provider. On the target Redmi/NJU-WLAN it serves normal Nanjing tiles through z13, then a fixed `Map data not yet available` placeholder from z14 upward. |
+| `AMAP` (automatic in mainland China) | `webrd0{1-4}.is.autonavi.com` (style 8, zh labels) | GCJ-02 | 3–18 | Beijing | Detailed mainland-China provider, no API key. The map automatically selects it when the camera center is inside mainland China and switches back to Esri outside China. |
 
 Each source carries `minZoom`/`maxZoom`/`clampCamera`/`defaultCenter`. Every surface calls
 `MapLibreMap.applyZoomBounds(tileSource)` when it applies a style. Only sources with `clampCamera`
