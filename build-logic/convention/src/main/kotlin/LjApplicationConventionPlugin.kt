@@ -33,7 +33,7 @@ class LjApplicationConventionPlugin : Plugin<Project> {
                 defaultConfig {
                     minSdk = 28
                     targetSdk = 36
-                    val versionName = "0.27.0-openlocation.2"
+                    val versionName = "0.27.0-openlocation.3"
                     val (maj, min, pat) = versionName.substringBefore("-").split(".").map { it.toInt() }
                     val forkRevision = versionName.substringAfter("openlocation.", "0").toIntOrNull() ?: 0
                     this.versionName = versionName

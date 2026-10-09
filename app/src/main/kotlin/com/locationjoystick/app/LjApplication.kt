@@ -11,6 +11,7 @@ import com.locationjoystick.core.data.RouteRepository
 import com.locationjoystick.core.data.SettingsRepository
 import com.locationjoystick.core.location.MockLocationService
 import com.locationjoystick.core.map.maplibre.MapTileHttp
+import com.locationjoystick.core.map.projection.Gcj02
 import com.locationjoystick.core.model.GroupRole
 import com.locationjoystick.core.model.MapTileSource
 import dagger.hilt.android.HiltAndroidApp
@@ -19,7 +20,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import java.util.Locale
 import javax.inject.Inject
 
 @HiltAndroidApp
@@ -48,7 +48,7 @@ class LjApplication : Application() {
         super.onCreate()
         MapTileHttp.install(this)
         resumeActiveGroupRole()
-        migrateMainlandDefaults()
+        migrateMapDefaults()
         applicationScope.launch {
             settingsRepository.getDisabledGeocodingProviders().collect { Geocoding.disabled = it }
         }
@@ -76,20 +76,26 @@ class LjApplication : Application() {
     }
 
     /**
-     * OpenLocation is primarily used on mainland-China devices where the upstream OSM tile and
-     * Nominatim endpoints can be unreachable. Migrate an existing install exactly once:
-     * if the device locale is mainland China and the user still has the upstream OSM default,
-     * switch to AMap. A later manual OSM choice is respected because the migration flag remains set.
+     * The upstream OSM tile endpoint is unreachable on the target mainland-China network, while
+     * AMap has no useful street coverage for remembered positions outside mainland China.
+     * Migrate those legacy defaults once to the globally reachable Esri source. Later manual
+     * source choices are respected because the migration flag remains set.
      */
-    private fun migrateMainlandDefaults() {
+    private fun migrateMapDefaults() {
         applicationScope.launch {
             val migrationPrefs = getSharedPreferences("openlocation_fork_migrations", MODE_PRIVATE)
-            val migrationKey = "mainland_map_default_v1"
+            val migrationKey = "global_map_default_v2"
             if (migrationPrefs.getBoolean(migrationKey, false)) return@launch
 
-            val isMainlandChina = Locale.getDefault().country.equals("CN", ignoreCase = true)
-            if (isMainlandChina && settingsRepository.getMapTileSource().first() == MapTileSource.OSM) {
-                settingsRepository.setMapTileSource(MapTileSource.AMAP)
+            val source = settingsRepository.getMapTileSource().first()
+            val lastLocation = settingsRepository.getLastLocation().first()
+            val amapOutsideCoverage =
+                source == MapTileSource.AMAP &&
+                    lastLocation != null &&
+                    Gcj02.isOutsideChina(lastLocation.latitude, lastLocation.longitude)
+
+            if (source == MapTileSource.OSM || amapOutsideCoverage) {
+                settingsRepository.setMapTileSource(MapTileSource.ESRI)
             }
 
             migrationPrefs.edit().putBoolean(migrationKey, true).apply()

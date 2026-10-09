@@ -19,6 +19,13 @@ class MapZoomBoundsTest {
     }
 
     @Test
+    fun `ESRI keeps MapLibre default camera range`() {
+        val bounds = cameraZoomBounds(MapTileSource.ESRI)
+        assertEquals(MapLibreConstants.MINIMUM_ZOOM.toFloat(), bounds.start, 0f)
+        assertEquals(MapLibreConstants.MAXIMUM_ZOOM.toFloat(), bounds.endInclusive, 0f)
+    }
+
+    @Test
     fun `AMAP camera clamped to served tile range`() {
         assertEquals(3f..18f, cameraZoomBounds(MapTileSource.AMAP))
     }

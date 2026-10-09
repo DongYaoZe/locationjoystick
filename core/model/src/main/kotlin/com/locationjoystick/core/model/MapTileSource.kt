@@ -46,6 +46,19 @@ enum class MapTileSource(
      * Coverage is mainland China (plus coarse surroundings) at zoom 3–18 only — outside that the
      * server returns empty tiles, which is why the range is clamped and the default center is Beijing.
      */
+    ESRI(
+        tileUrlTemplates =
+            listOf(
+                "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
+            ),
+        minZoom = 0f,
+        maxZoom = 19f,
+        clampCamera = false,
+        coordinateSystem = MapCoordinateSystem.WGS84,
+        // Paris — keeps the app's historical global default while remaining usable worldwide.
+        defaultCenter = LatLng(latitude = 48.8566, longitude = 2.3522),
+    ),
+
     AMAP(
         tileUrlTemplates =
             (1..4).map { shard ->
@@ -61,7 +74,7 @@ enum class MapTileSource(
     ;
 
     companion object {
-        val DEFAULT = AMAP
+        val DEFAULT = ESRI
 
         /** Lenient parse for persisted/imported values — unknown names fall back to [DEFAULT]. */
         fun fromName(name: String?): MapTileSource = entries.firstOrNull { it.name == name } ?: DEFAULT

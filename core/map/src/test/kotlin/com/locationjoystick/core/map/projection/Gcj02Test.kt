@@ -70,6 +70,7 @@ class Gcj02Test {
     @Test
     fun `projection selection follows the tile source datum`() {
         assertSame(MapProjection.Identity, MapTileSource.OSM.projection)
+        assertSame(MapProjection.Identity, MapTileSource.ESRI.projection)
         assertSame(MapProjection.Gcj02Projection, MapTileSource.AMAP.projection)
     }
 
@@ -91,6 +92,7 @@ class Gcj02Test {
     @Test
     fun `fromName is lenient`() {
         assertEquals(MapTileSource.AMAP, MapTileSource.fromName("AMAP"))
+        assertEquals(MapTileSource.ESRI, MapTileSource.fromName("ESRI"))
         assertEquals(MapTileSource.DEFAULT, MapTileSource.fromName("bogus"))
         assertEquals(MapTileSource.DEFAULT, MapTileSource.fromName(null))
     }

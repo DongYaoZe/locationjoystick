@@ -1,6 +1,6 @@
 # Map (MapLibre)
 
-Main screen. Raster base map (OpenStreetMap by default) centered on `AppConstants.MapConstants.DEFAULT_LAT` / `AppConstants.MapConstants.DEFAULT_LON` first load. Scroll on by default. The app opens on the Map while spoofing is running or paused, and on Home otherwise (see docs/architecture.md, "Navigation").
+Main screen. Raster base map (Esri World Street Map by default in the OpenLocation fork) centered on `AppConstants.MapConstants.DEFAULT_LAT` / `AppConstants.MapConstants.DEFAULT_LON` first load. Scroll on by default. The app opens on the Map while spoofing is running or paused, and on Home otherwise (see docs/architecture.md, "Navigation").
 
 Key files: `:feature:map:impl/MapScreen.kt`, `:feature:map:impl/MapViewModel.kt`
 
@@ -26,7 +26,8 @@ point.
 
 | Source | Tiles | Datum | Zoom | Default center | Notes |
 |---|---|---|---|---|---|
-| `OSM` (default) | `tile.openstreetmap.org` | WGS-84 | 0–19 | Paris | Unchanged behaviour. |
+| `OSM` | `tile.openstreetmap.org` | WGS-84 | 0–19 | Paris | Upstream source; unreachable on the target NJU-WLAN during Redmi testing. |
+| `ESRI` (default) | `server.arcgisonline.com/.../World_Street_Map/.../tile/{z}/{y}/{x}` | WGS-84 | 0–19 | Paris | Global fallback/default; Redmi tests returned tiles for both Paris and Nanjing. |
 | `AMAP` | `webrd0{1-4}.is.autonavi.com` (style 8, zh labels) | GCJ-02 | 3–18 | Beijing | Community raster endpoint, no API key. Fast from mainland China where OSM tiles are throttled. Coverage is mainland China only. |
 
 Each source carries `minZoom`/`maxZoom`/`clampCamera`/`defaultCenter`. Every surface calls
@@ -37,7 +38,7 @@ z19, as before). `defaultCenter` is used as the first-open camera when there is 
 `MapController.startSpoofing` as the very first mock fix, so a fresh install on Amap starts inside
 its coverage instead of over Paris.
 
-No custom-URL option by design — keeps the setting a simple two-way toggle and avoids shipping a
+No custom-URL option by design — keeps the setting a fixed provider picker and avoids shipping a
 free-form network field.
 
 ### GCJ-02 boundary
@@ -62,10 +63,9 @@ in Settings applies to every open map screen without recreating it.
 
 MapLibre's built-in attribution button is disabled on all surfaces, so each one renders
 `MapAttribution` (`:core:map/ui/MapAttribution.kt`) in the bottom-left corner with a
-per-provider credit line (`map_attribution_osm` / `map_attribution_amap`), which also surfaces the
+per-provider credit line (`map_attribution_osm` / `map_attribution_esri` / `map_attribution_amap`), which also surfaces the
 GCJ-02 datum to the user. The OSM label is required by the OSM Tile Usage Policy (attribution must be
-clearly visible on the map), so it stays visible on the default source and is never gated to
-non-default sources.
+clearly visible on the map), so it stays visible whenever OSM is selected; Esri and AMap likewise show their own provider credits.
 
 ### OSM tiles
 
@@ -117,7 +117,7 @@ See docs/features/favorites.md and docs/features/routes.md.
 
 Nominatim search (`NominatimSearchBar`) keeps its 300 ms typing debounce and goes through the process-wide
 `Geocoding.provider` (`GeocodingProvider`, `:core:common`), which also serves the reverse lookups (spoof-toggle
-label, map-picker suggested name). `Geocoding.provider` is a `FallbackGeocodingProvider` that tries `NominatimProvider` then `PhotonProvider` (keyless `photon.komoot.io`, reachable from mainland China). A provider that throws (timeout, connection error, 429, 4xx/5xx) is skipped for 10 minutes (`GeocodingConstants.PROVIDER_COOLDOWN_MS`, in memory, shared by search and reverse); when all are cooling down all are tried anyway, and an empty result is not a failure. Providers unchecked in Settings > Menus > Place search (`AppSettings.disabledGeocodingProviders`, mirrored into `Geocoding.disabled` by `LjApplication`) are never called; if every provider is disabled (hand-edited import), all are used. The UI refuses to uncheck the last one. Each provider owns its URLs and JSON,
+label, map-picker suggested name). `Geocoding.provider` is a `FallbackGeocodingProvider` that tries `PhotonProvider` first, then `NominatimProvider` (keyless `photon.komoot.io`, reachable from the target mainland-China network). A provider that throws (timeout, connection error, 429, 4xx/5xx) is skipped for 10 minutes (`GeocodingConstants.PROVIDER_COOLDOWN_MS`, in memory, shared by search and reverse); when all are cooling down all are tried anyway, and an empty result is not a failure. Providers unchecked in Settings > Menus > Place search (`AppSettings.disabledGeocodingProviders`, mirrored into `Geocoding.disabled` by `LjApplication`) are never called; if every provider is disabled (hand-edited import), all are used. The UI refuses to uncheck the last one. Each provider owns its URLs and JSON,
 maps them to `GeocodeResult`/`ReverseGeocodeResult`, and uses `NominatimSearchClient` for search: results are cached (24 h fresh, expired entries served only if the
 request fails) and request starts are spaced at least 1.1 s apart to respect Nominatim's 1 request/second policy.
 

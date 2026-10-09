@@ -253,6 +253,12 @@ private fun mapTileSourceLabel(source: MapTileSource): String =
                 stringResource(R.string.settings_menus_map_source_osm),
                 stringResource(R.string.settings_menus_map_source_osm_default_city),
             )
+        MapTileSource.ESRI ->
+            stringResource(
+                R.string.settings_menus_map_source_item,
+                stringResource(R.string.settings_menus_map_source_esri),
+                stringResource(R.string.settings_menus_map_source_esri_default_city),
+            )
         MapTileSource.AMAP ->
             stringResource(
                 R.string.settings_menus_map_source_item,

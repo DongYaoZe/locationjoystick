@@ -27,7 +27,7 @@ All in `:core:model`. Pure Kotlin — no Android, no Room. Room entities in `:co
 | `JoystickStyle` | enum: `FLOATING`, `FIXED` |
 | `SpeedUnit` | enum: `KMH`, `MPH` |
 | `GeocodingProviderId` | enum: `NOMINATIM`, `PHOTON` — geocoding services switchable in Settings > Menus > Place search; lenient `fromName()` returns null for unknown names (see docs/features/map.md) |
-| `MapTileSource` | enum: `OSM`, `AMAP` — carries `tileUrlTemplates`, `minZoom`/`maxZoom`, `clampCamera: Boolean`, `coordinateSystem: MapCoordinateSystem`, `defaultCenter: LatLng`; `DEFAULT = AMAP`, lenient `fromName()` (see docs/features/map.md, "Map source") |
+| `MapTileSource` | enum: `OSM`, `ESRI`, `AMAP` — carries `tileUrlTemplates`, `minZoom`/`maxZoom`, `clampCamera: Boolean`, `coordinateSystem: MapCoordinateSystem`, `defaultCenter: LatLng`; `DEFAULT = ESRI`, lenient `fromName()` (see docs/features/map.md, "Map source") |
 | `MapCoordinateSystem` | enum: `WGS84`, `GCJ02` — datum a tile provider renders in; drives the presentation-edge projection in `:core:map` |
 | `ThemeMode` | enum: `DARK`, `LIGHT` |
 | `AppLanguage` | enum (each carries `languageTag: String?`): `SYSTEM_DEFAULT`, `ENGLISH`, `CHINESE_SIMPLIFIED`, `CHINESE_TRADITIONAL` |
