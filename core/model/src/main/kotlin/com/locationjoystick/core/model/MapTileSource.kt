@@ -61,7 +61,7 @@ enum class MapTileSource(
     ;
 
     companion object {
-        val DEFAULT = OSM
+        val DEFAULT = AMAP
 
         /** Lenient parse for persisted/imported values — unknown names fall back to [DEFAULT]. */
         fun fromName(name: String?): MapTileSource = entries.firstOrNull { it.name == name } ?: DEFAULT

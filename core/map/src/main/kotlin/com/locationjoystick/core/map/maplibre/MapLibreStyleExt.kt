@@ -113,7 +113,7 @@ data class LocationLayerSources(
  * Adds base-map raster tiles, position dot, walk-trace, walk-remaining, walk-endpoints,
  * and optionally a search-marker circle layer.
  *
- * @param tileSource  Base-map provider (see [MapTileSource]); defaults to OSM.
+ * @param tileSource  Base-map provider (see [MapTileSource]); defaults to the configured fork default.
  * @param osmSourceId Raster source ID — use [MapLibreSourceIds.PANEL_OSM] for the widget overlay
  *                    to avoid colliding with the main map.
  * @param osmLayerId  Raster layer ID — use [MapLibreLayerIds.PANEL_OSM] for the widget overlay.
@@ -244,7 +244,7 @@ data class PickerLayerSources(
 /**
  * Adds base-map tiles, optional current-position dot, and a tap-marker layer (MapPickerScreen).
  *
- * @param tileSource Base-map provider (see [MapTileSource]); defaults to OSM.
+ * @param tileSource Base-map provider (see [MapTileSource]); defaults to the configured fork default.
  * @param currentPosGeoJson If non-null, a blue dot is added at that GeoJSON position.
  */
 fun Style.addPickerLayers(
@@ -299,7 +299,7 @@ data class CreatorLayerSources(
  * Adds base-map tiles, optional current-position dot, route segment lines, and waypoint circles
  * (RouteCreatorScreen).
  *
- * @param tileSource Base-map provider (see [MapTileSource]); defaults to OSM.
+ * @param tileSource Base-map provider (see [MapTileSource]); defaults to the configured fork default.
  * @param currentPosGeoJson If non-null, a blue dot is added at that GeoJSON position.
  */
 fun Style.addCreatorLayers(

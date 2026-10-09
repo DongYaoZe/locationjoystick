@@ -91,8 +91,8 @@ class Gcj02Test {
     @Test
     fun `fromName is lenient`() {
         assertEquals(MapTileSource.AMAP, MapTileSource.fromName("AMAP"))
-        assertEquals(MapTileSource.OSM, MapTileSource.fromName("bogus"))
-        assertEquals(MapTileSource.OSM, MapTileSource.fromName(null))
+        assertEquals(MapTileSource.DEFAULT, MapTileSource.fromName("bogus"))
+        assertEquals(MapTileSource.DEFAULT, MapTileSource.fromName(null))
     }
 
     @Test

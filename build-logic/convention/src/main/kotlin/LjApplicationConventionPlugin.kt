@@ -33,10 +33,11 @@ class LjApplicationConventionPlugin : Plugin<Project> {
                 defaultConfig {
                     minSdk = 28
                     targetSdk = 36
-                    val versionName = "0.27.0-openlocation.1"
+                    val versionName = "0.27.0-openlocation.2"
                     val (maj, min, pat) = versionName.substringBefore("-").split(".").map { it.toInt() }
+                    val forkRevision = versionName.substringAfter("openlocation.", "0").toIntOrNull() ?: 0
                     this.versionName = versionName
-                    versionCode = maj * 10000 + min * 100 + pat
+                    versionCode = maj * 10000 + min * 100 + pat + forkRevision
                     buildConfigField("String", "VERSION_NAME", "\"$versionName\"")
                 }
 

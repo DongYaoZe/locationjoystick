@@ -46,5 +46,5 @@ object Geocoding {
     var disabled: Set<GeocodingProviderId> = emptySet()
 
     val provider: GeocodingProvider =
-        FallbackGeocodingProvider(listOf(nominatim, photon), enabled = { ids[it] !in disabled })
+        FallbackGeocodingProvider(listOf(photon, nominatim), enabled = { ids[it] !in disabled })
 }

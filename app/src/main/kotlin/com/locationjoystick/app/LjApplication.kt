@@ -12,12 +12,14 @@ import com.locationjoystick.core.data.SettingsRepository
 import com.locationjoystick.core.location.MockLocationService
 import com.locationjoystick.core.map.maplibre.MapTileHttp
 import com.locationjoystick.core.model.GroupRole
+import com.locationjoystick.core.model.MapTileSource
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltAndroidApp
@@ -46,6 +48,7 @@ class LjApplication : Application() {
         super.onCreate()
         MapTileHttp.install(this)
         resumeActiveGroupRole()
+        migrateMainlandDefaults()
         applicationScope.launch {
             settingsRepository.getDisabledGeocodingProviders().collect { Geocoding.disabled = it }
         }
@@ -69,6 +72,27 @@ class LjApplication : Application() {
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * OpenLocation is primarily used on mainland-China devices where the upstream OSM tile and
+     * Nominatim endpoints can be unreachable. Migrate an existing install exactly once:
+     * if the device locale is mainland China and the user still has the upstream OSM default,
+     * switch to AMap. A later manual OSM choice is respected because the migration flag remains set.
+     */
+    private fun migrateMainlandDefaults() {
+        applicationScope.launch {
+            val migrationPrefs = getSharedPreferences("openlocation_fork_migrations", MODE_PRIVATE)
+            val migrationKey = "mainland_map_default_v1"
+            if (migrationPrefs.getBoolean(migrationKey, false)) return@launch
+
+            val isMainlandChina = Locale.getDefault().country.equals("CN", ignoreCase = true)
+            if (isMainlandChina && settingsRepository.getMapTileSource().first() == MapTileSource.OSM) {
+                settingsRepository.setMapTileSource(MapTileSource.AMAP)
+            }
+
+            migrationPrefs.edit().putBoolean(migrationKey, true).apply()
         }
     }
 

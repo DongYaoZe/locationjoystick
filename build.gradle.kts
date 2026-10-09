@@ -16,7 +16,7 @@ val needsAsciiWindowsBuildDir =
         rootProject.projectDir.absolutePath.any { it.code > 0x7F }
 
 if (needsAsciiWindowsBuildDir) {
-    val safeBuildRoot = file("D:/Documents/_build-cache/OpenLocation")
+    val safeBuildRoot = file("D:/Documents/_build-cache/OpenLocation-v2")
     layout.buildDirectory.set(safeBuildRoot.resolve("_root"))
 
     subprojects {

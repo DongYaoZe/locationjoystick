@@ -277,14 +277,14 @@ class SettingsExportCodecEdgeCaseTest {
     }
 
     @Test
-    fun `missing mapTileSource falls back to OSM`() {
+    fun `missing mapTileSource falls back to default map source`() {
         val json =
             """{"schemaVersion":1,"exportedAt":0,"settings":{"speedUnit":"KMH"},""" +
                 """"speedProfiles":[],"routes":[],"favoriteLocations":[]}"""
 
         val parsed = SettingsExportCodec.parseExportData(json)
 
-        assertEquals(MapTileSource.OSM, parsed.settings.mapTileSource)
+        assertEquals(MapTileSource.DEFAULT, parsed.settings.mapTileSource)
     }
 
     @Test
