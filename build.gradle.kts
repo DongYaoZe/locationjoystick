@@ -11,6 +11,20 @@ plugins {
     alias(libs.plugins.ktlint)
 }
 
+val needsAsciiWindowsBuildDir =
+    System.getProperty("os.name").startsWith("Windows", ignoreCase = true) &&
+        rootProject.projectDir.absolutePath.any { it.code > 0x7F }
+
+if (needsAsciiWindowsBuildDir) {
+    val safeBuildRoot = file("D:/Documents/_build-cache/OpenLocation")
+    layout.buildDirectory.set(safeBuildRoot.resolve("_root"))
+
+    subprojects {
+        val relativeProjectPath = path.removePrefix(":").replace(':', '/')
+        layout.buildDirectory.set(safeBuildRoot.resolve(relativeProjectPath))
+    }
+}
+
 subprojects {
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
 }

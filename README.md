@@ -1,11 +1,11 @@
-# locationjoystick
+# OpenLocation
 
 ![Build](https://img.shields.io/github/actions/workflow/status/shortcuts/locationjoystick/main.yml?label=Build&style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)
 ![minSdk](https://img.shields.io/badge/minSdk-28%20(Android%209)-green?style=flat-square)
 [![Discord](https://img.shields.io/badge/Discord-Join-5865F2?style=flat-square&logo=discord&logoColor=white)](https://discord.gg/r9DRnkwbMf)
 
-A free, open-source Android app that changes the location your phone reports. Move a floating joystick, replay a saved route, or let the app wander on its own — your other apps keep working like nothing changed.
+OpenLocation is a free, open-source Android mock-location app based on locationjoystick. Move a floating joystick, replay a saved route, or let the app wander on its own.
 
 - **Free and open-source** — no subscriptions, no ads, no paywalled features
 - **No root required** — works through Android's built-in Developer Options
@@ -29,7 +29,7 @@ See the **[wiki](https://locationjoystick.shrtcts.fr/)** for every feature: the 
 - Search and sort saved favorites and routes; rename, delete, and share them from the widget too.
 - Use a compact movable widget map with north lock, or expand it for more space.
 - Preview planting circles and spiral roaming, with optional jumps between route stops.
-- See an "update available" badge (checked about once a day) and a "What's new" badge for your current version on the Home screen.
+- Open the optional "What's new" badge when you want to review release notes; OpenLocation does not automatically check the upstream repository for updates.
 
 ## Community
 
@@ -41,4 +41,4 @@ Want to build the app or open a PR? See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-MIT License. See [LICENSE](LICENSE) for full text.
+MIT License. See [LICENSE](LICENSE) for full text. OpenLocation retains attribution to the upstream locationjoystick project; fork-specific changes are summarized in [FORK_NOTES.md](FORK_NOTES.md).

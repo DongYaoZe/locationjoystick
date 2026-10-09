@@ -49,19 +49,24 @@ class LjApplication : Application() {
         applicationScope.launch {
             settingsRepository.getDisabledGeocodingProviders().collect { Geocoding.disabled = it }
         }
-        applicationScope.launch {
-            if (hotLocationsRepository.refreshIfStale()) {
-                val s = settingsRepository.getSettingsSnapshot().first()
-                if (s.hotLocationsEnabled) {
-                    favoriteRepository.upsertHotLocations(hotLocationsRepository.locations.value, s.selectedHotLocationIds)
+        if (OpenLocationPolicy.ENABLE_BACKGROUND_CONTENT_REFRESH) {
+            applicationScope.launch {
+                if (hotLocationsRepository.refreshIfStale()) {
+                    val s = settingsRepository.getSettingsSnapshot().first()
+                    if (s.hotLocationsEnabled) {
+                        favoriteRepository.upsertHotLocations(
+                            hotLocationsRepository.locations.value,
+                            s.selectedHotLocationIds,
+                        )
+                    }
                 }
             }
-        }
-        applicationScope.launch {
-            if (hotRoutesRepository.refreshIfStale()) {
-                val s = settingsRepository.getSettingsSnapshot().first()
-                if (s.hotRoutesEnabled) {
-                    routeRepository.upsertHotRoutes(hotRoutesRepository.routes.value, s.selectedHotRouteIds)
+            applicationScope.launch {
+                if (hotRoutesRepository.refreshIfStale()) {
+                    val s = settingsRepository.getSettingsSnapshot().first()
+                    if (s.hotRoutesEnabled) {
+                        routeRepository.upsertHotRoutes(hotRoutesRepository.routes.value, s.selectedHotRouteIds)
+                    }
                 }
             }
         }

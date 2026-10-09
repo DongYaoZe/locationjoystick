@@ -58,7 +58,7 @@ set -euo pipefail
 
 # ── Config ───────────────────────────────────────────────────────────────────
 
-PACKAGE="com.locationjoystick.app"
+PACKAGE="com.dongyaoze.openlocation"
 ACTIVITY=".MainActivity"
 OUTPUT_DIR="docs/wiki/screenshots"
 ADB_DEVICE=""

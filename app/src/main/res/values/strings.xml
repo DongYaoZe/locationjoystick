@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">locationjoystick</string>
-    <string name="accessibility_service_label">locationjoystick compass</string>
+    <string name="app_name">OpenLocation</string>
+    <string name="accessibility_service_label">OpenLocation compass</string>
     <string name="accessibility_service_description">"Used only by the optional Tap to Walk compass feature, after you tap Accept on the in-app Accessibility disclosure. Takes one screenshot when the Tap to Walk overlay opens to read your game’s compass direction. The screenshot stays on your phone and is deleted immediately. Nothing is collected or shared. Not an accessibility tool for users with disabilities."</string>
     <string name="app_couldn_t_open_that_link">"Couldn't open that link"</string>
     <string name="drawer_close_menu_cd">"Close menu"</string>
@@ -19,7 +19,7 @@
     <string name="idle_routes_description">"Replay saved routes."</string>
     <string name="idle_favorites_description">"Teleport or walk to saved locations."</string>
     <string name="idle_group_sync_description">"Mirror your location to other devices on the same Wi-Fi."</string>
-    <string name="idle_settings_description">"Configure locationjoystick and spoof preferences."</string>
+    <string name="idle_settings_description">"Configure OpenLocation and spoof preferences."</string>
     <string name="whats_new_new_and_improved">"New &amp; Improved"</string>
     <string name="whats_new_fixes">"Fixes"</string>
     <string name="whats_new_what_s_new">"What's new"</string>

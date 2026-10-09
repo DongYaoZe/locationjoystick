@@ -1,12 +1,15 @@
 # Update Available Check
 
+> OpenLocation fork policy: this feature remains in the inherited codebase but is disabled by default via `OpenLocationPolicy.ENABLE_UPSTREAM_UPDATE_CHECK = false`, so opening the app does not contact the upstream GitHub repository.
+
 A small home-screen badge (`vX.Y.Z available`) tells the user a newer release exists on GitHub. Tapping it opens that release's page in the browser; the inline "X" dismisses it. Both acknowledge that version, so the badge stays hidden until an even newer one appears.
 
 Key files: `:app/UpdateAvailablePopup.kt`, `:app/UpdateAvailableViewModel.kt`, `:app/DismissiblePillBadge.kt`, `:core:data/UpdateCheckRepository.kt`, `:core:common/util/VersionUtils.kt`
 
 ## Behaviour
 
-- On app open, `UpdateAvailableViewModel` checks at most once per `AppConstants.UpdateCheckConstants.CHECK_INTERVAL_MS` (24 h), gated by `update_check_last_checked_at_ms`. The timestamp is written before the request, so a failed or offline check also waits a day instead of retrying every launch.
+- In the OpenLocation fork the badge/ViewModel is not instantiated while the policy flag is disabled, so there is no automatic release request on app open.
+- If the policy is deliberately re-enabled, `UpdateAvailableViewModel` checks at most once per `AppConstants.UpdateCheckConstants.CHECK_INTERVAL_MS` (24 h), gated by `update_check_last_checked_at_ms`. The timestamp is written before the request, so a failed or offline check also waits a day instead of retrying every launch.
 - `UpdateCheckRepository.fetchLatestVersion()` does one `GET api.github.com/repos/<slug>/releases/latest` and returns `tag_name` without its `v` prefix, or `null` on any failure (offline degrades silently).
 - The badge shows when the cached version is `isNewerVersion` than `AppInfo.VERSION_NAME` and differs from the dismissed version. The compare strips a `v` prefix and any `-` pre-release suffix; missing segments count as 0.
 - The release URL is derived from the cached version (`UpdateCheckConstants.releaseUrl`), not stored separately.

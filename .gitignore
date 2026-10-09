@@ -6,6 +6,9 @@ local.properties
 *.keystore
 *.jks
 build/
+.build-cache/
+.signing/
+dist/
 captures/
 .externalNativeBuild/
 .cxx/

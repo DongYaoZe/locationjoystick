@@ -11,7 +11,7 @@ android {
         buildConfig = true
     }
     defaultConfig {
-        applicationId = "com.locationjoystick.app"
+        applicationId = "com.dongyaoze.openlocation"
         testInstrumentationRunner = "com.locationjoystick.app.HiltTestRunner"
     }
     androidResources {

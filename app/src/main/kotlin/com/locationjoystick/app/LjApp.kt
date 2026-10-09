@@ -182,9 +182,11 @@ fun LjApp(
             WhatsNewPopup(
                 modifier = Modifier.align(Alignment.BottomStart).padding(16.dp),
             )
-            UpdateAvailablePopup(
-                modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp),
-            )
+            if (OpenLocationPolicy.ENABLE_UPSTREAM_UPDATE_CHECK) {
+                UpdateAvailablePopup(
+                    modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp),
+                )
+            }
         }
     }
 }

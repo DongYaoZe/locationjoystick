@@ -29,7 +29,7 @@
 
 set -euo pipefail
 
-PACKAGE="com.locationjoystick.app"
+PACKAGE="com.dongyaoze.openlocation"
 ACTIVITY=".MainActivity"
 OUTPUT=""
 ADB_DEVICE=""

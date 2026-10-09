@@ -32,13 +32,13 @@ install-on-phone:
 	./gradlew installDebug
 
 reinstall-on-phone:
-	adb uninstall com.locationjoystick.app || true && ./gradlew installDebug
+	adb uninstall com.dongyaoze.openlocation || true && ./gradlew installDebug
 
 start-on-phone:
-	adb shell am start -n com.locationjoystick.app/com.locationjoystick.app.MainActivity
+	adb shell am start -n com.dongyaoze.openlocation/com.locationjoystick.app.MainActivity
 
 tail-log-on-phone:
-	adb logcat --pid=$(adb shell pidof com.locationjoystick.app)
+	adb logcat --pid=$(adb shell pidof com.dongyaoze.openlocation)
 
 test:
 	./gradlew testRelease

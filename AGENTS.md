@@ -10,7 +10,7 @@ Android-only mock GPS app. Background operation, minimal battery.
 
 | Field | Value |
 |---|---|
-| Package | `com.locationjoystick.app` |
+| Installed package | `com.dongyaoze.openlocation` (source namespace remains `com.locationjoystick.app`) |
 | Language | Kotlin |
 | UI | Jetpack Compose |
 | Min SDK | API 28 |
@@ -24,6 +24,7 @@ Constraints:
 - Offline-first
 - No accounts
 - All data on-device in Room + DataStore
+- OpenLocation fork: no automatic upstream release check or hot-content refresh on app launch
 
 ---
 
