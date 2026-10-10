@@ -1,11 +1,11 @@
 # OpenLocation
 
-![Build](https://img.shields.io/github/actions/workflow/status/shortcuts/locationjoystick/main.yml?label=Build&style=flat-square)
+![Build](https://img.shields.io/github/actions/workflow/status/DongYaoZe/locationjoystick/main.yml?label=Build&style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)
 ![minSdk](https://img.shields.io/badge/minSdk-28%20(Android%209)-green?style=flat-square)
 [![Discord](https://img.shields.io/badge/Discord-Join-5865F2?style=flat-square&logo=discord&logoColor=white)](https://discord.gg/r9DRnkwbMf)
 
-OpenLocation is a free, open-source Android mock-location app based on locationjoystick. Move a floating joystick, replay a saved route, or let the app wander on its own.
+OpenLocation is a free, open-source Android mock-location app forked from [shortcuts/locationjoystick](https://github.com/shortcuts/locationjoystick). Move a floating joystick, replay a saved route, or let the app wander on its own.
 
 - **Free and open-source** — no subscriptions, no ads, no paywalled features
 - **No root required** — works through Android's built-in Developer Options
@@ -13,7 +13,7 @@ OpenLocation is a free, open-source Android mock-location app based on locationj
 
 ## Download
 
-Get the latest APK from the [Releases page](https://github.com/shortcuts/locationjoystick/releases/latest).
+Get the latest APK from the [Releases page](https://github.com/DongYaoZe/locationjoystick/releases/latest).
 
 Open the downloaded file to install. If Android blocks it, allow installs from unknown sources for your browser or file manager, then try again.
 
@@ -31,9 +31,9 @@ See the **[wiki](https://locationjoystick.shrtcts.fr/)** for every feature: the 
 - Preview planting circles and spiral roaming, with optional jumps between route stops.
 - Open the optional "What's new" badge when you want to review release notes; OpenLocation does not automatically check the upstream repository for updates.
 
-## Community
+## Upstream
 
-Join the **[Discord server](https://discord.gg/r9DRnkwbMf)** for help, feature requests, and updates.
+This repository is a fork of **[shortcuts/locationjoystick](https://github.com/shortcuts/locationjoystick)** and retains the upstream MIT license and attribution. Upstream documentation and community resources remain useful for features inherited from the original project.
 
 ## Contributing
 
